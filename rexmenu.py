@@ -104,11 +104,25 @@ class Menu(object):
         self.down_keys = None
         self.left_keys = None
         self.right_keys = None
-        try:
-            fh = open("rexmenu.cfg")
+        fh = self.find_cfg()
+        if fh is None:
+            self.parse_games()
+        else:
             self.parse_cfg(fh)
-        except OSError:
-            menu.parse_games()
+
+    def find_cfg(self):
+        try:
+            home = os.path.expanduser("~")
+            fh = open(os.path.join(home, ".rexmenu"))
+        except IOError:
+            try:
+                fh = open("/etc/rexmenu.cfg")
+            except IOError:
+                try:
+                    fh = open("rexmenu.cfg")
+                except IOError:
+                    fh = None
+        return fh
 
     def setup(self):
         if self.windowed:
