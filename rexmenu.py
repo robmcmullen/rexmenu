@@ -144,7 +144,6 @@ class Menu(object):
         r, _ = os.path.splitext(rom)
         if r != rom:
             alternates.append(r)
-        print alternates
 
         # loop through all search directory combos looking for PNG or JPG files
         # that match the game name
@@ -237,7 +236,6 @@ class Menu(object):
 
     def parse_games(self, path="*.png"):
         for filename in glob.glob(path):
-            print filename
             if filename == "title.png":
                 self.load_title_image(filename)
                 continue
