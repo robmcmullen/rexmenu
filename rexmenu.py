@@ -5,7 +5,6 @@ import subprocess
 import ConfigParser
 
 import pygame
-from pygame import *
 
 
 white = (255,255,255)
@@ -90,7 +89,7 @@ class Menu(object):
         self.first_visible = 0
         self.num_visible = 0
         self.screen = None
-        self.clock = time.Clock()
+        self.clock = pygame.time.Clock()
         self.games = []
         self.font = pygame.font.Font(None, 30)
         self.mainmenu = mainmenu_name
@@ -132,7 +131,7 @@ class Menu(object):
             info = pygame.display.Info()
             self.w = info.current_w
             self.h = info.current_h
-        self.screen = display.set_mode((self.w, self.h), flags)
+        self.screen = pygame.display.set_mode((self.w, self.h), flags)
         pygame.mouse.set_visible(False)
 
     def find_image(self, rom, emulator):
@@ -316,9 +315,9 @@ class Menu(object):
         num_games = len(self.games)
         while not done:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     done = True
-                if event.type == KEYDOWN:
+                if event.type == pygame.KEYDOWN:
                     if event.key in self.quit_keys:
                         done = True
                     elif event.key in self.run_keys:
@@ -393,13 +392,13 @@ class Menu(object):
                     self.screen.fill((0,0,0), r)
                 x, y = self.get_font_pos(i)
                 game.draw(self.screen, cx, cy, y)
-        display.flip()
+        pygame.display.flip()
 #        self.clock.tick(5)
 
 
 if __name__ == "__main__":
     #subprocess.call('clear',shell=True)
-    init()
+    pygame.init()
 
     menu = Menu()
     menu.show()
