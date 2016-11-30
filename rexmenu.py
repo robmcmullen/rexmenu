@@ -73,10 +73,10 @@ class Game(object):
 class Menu(object):
     image_paths = ["."]
 
-    def __init__(self, w, h, mainmenu_name = "rexmenu"):
-        self.w = w
-        self.h = h
-        self.usable_h = h
+    def __init__(self, mainmenu_name = "rexmenu"):
+        self.w = 1024
+        self.h = 768
+        self.usable_h = self.h
         self.highlight_size = 15
         self.highlight_border = 25
         self.highlight_color = (0, 200, 255)
@@ -95,6 +95,7 @@ class Menu(object):
         self.font = pygame.font.Font(None, 30)
         self.mainmenu = mainmenu_name
         self.thumbnail_size = 200
+        self.windowed = False
 
         # key definitions set during config file parsing
         self.quit_keys = None
@@ -110,7 +111,14 @@ class Menu(object):
             menu.parse_games()
 
     def setup(self):
-        self.screen = display.set_mode((self.w, self.h))
+        if self.windowed:
+            flags = 0
+        else:
+            flags = pygame.FULLSCREEN
+            info = pygame.display.Info()
+            self.w = info.current_w
+            self.h = info.current_h
+        self.screen = display.set_mode((self.w, self.h), flags)
         pygame.mouse.set_visible(False)
 
     def find_image(self, rom, emulator):
@@ -139,14 +147,14 @@ class Menu(object):
                         return image
         return None
 
-    def mainmenu_title(self, keyword, value):
+    def mainmenu_title(self, cfg, keyword, value):
         self.load_title_image(value)
 
-    def mainmenu_image_path(self, keyword, value):
+    def mainmenu_image_path(self, cfg, keyword, value):
         self.image_paths = value.split()
 
-    def mainmenu_thumbnail_size(self, keyword, value):
-        self.thumbnail_size = int(value)
+    def mainmenu_windowed(self, cfg, keyword, value):
+        self.windowed = cfg.getboolean(self.mainmenu, keyword)
 
     def get_keys(self, keysyms):
         keys = []
@@ -167,6 +175,15 @@ class Menu(object):
         "right": "RIGHT",
     }
 
+    int_defaults = {
+        "window width": "w",
+        "window height": "h",
+        "thumbnail size": "thumbnail_size",
+        "highlight size": "highlight_size",
+        "highlight border": "highlight_border",
+        "font border": "font_border",
+    }
+
     def parse_cfg_mainmenu(self, c):
         possible = c.options(self.mainmenu)
         for keyword in possible:
@@ -174,12 +191,16 @@ class Menu(object):
             if hasattr(self, func):
                 func = getattr(self, func)
                 value = c.get(self.mainmenu, keyword)
-                func(keyword, value)
+                func(c, keyword, value)
         for key, keysyms in self.key_defaults.iteritems():
             if c.has_option(self.mainmenu, key):
                 keysyms = c.get(self.mainmenu, key)
             key_list = self.get_keys(keysyms)
             setattr(self, "%s_keys" % key, key_list)
+        for keyword, attr_name in self.int_defaults.iteritems():
+            if c.has_option(self.mainmenu, keyword):
+                value = c.getint(self.mainmenu, keyword)
+                setattr(self, attr_name, value)
 
     def parse_cfg(self, fh):
         c = ConfigParser.ConfigParser()
@@ -368,7 +389,7 @@ if __name__ == "__main__":
     #subprocess.call('clear',shell=True)
     init()
 
-    menu = Menu(1280, 1024)
+    menu = Menu()
     menu.show()
 
     pygame.quit()
