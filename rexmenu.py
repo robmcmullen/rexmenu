@@ -403,11 +403,12 @@ if __name__ == "__main__":
 
     # argument to the script is an index number for the initial game to be
     # highlighted.
+    game_index = 0
     if len(sys.argv) > 1:
         try:
             game_index = int(sys.argv[1])
         except:
-            game_index = 0
+            pass
 
     pygame.init()
 
