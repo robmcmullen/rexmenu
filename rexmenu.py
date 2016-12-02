@@ -327,7 +327,6 @@ class Menu(object):
                         game.run()
 
                         # restart the program to re-initialize pygame
-                        # subprocess.call('clear',shell=True)
                         python = sys.executable
                         args = [sys.argv[0]]
                         args.append(str(game_index))
@@ -400,7 +399,7 @@ class Menu(object):
 
 
 if __name__ == "__main__":
-    #subprocess.call('clear',shell=True)
+    subprocess.call('clear', shell=True)
 
     # argument to the script is an index number for the initial game to be
     # highlighted.
