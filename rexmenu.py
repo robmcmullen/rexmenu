@@ -303,16 +303,17 @@ class Menu(object):
     def is_visible(self, index):
         return index >= self.first_visible and index < self.first_visible + self.num_visible
 
-    def show(self):
+    def show(self, game_index=0):
         """Main routine to check for user input and drawing the menu
 
         """
         self.setup()
         self.make_grid()
         done = False
-        game_index = 0
         last_index = -1
         num_games = len(self.games)
+        if game_index >= num_games:
+            game_index = num_games - 1
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -328,7 +329,9 @@ class Menu(object):
                         # restart the program to re-initialize pygame
                         # subprocess.call('clear',shell=True)
                         python = sys.executable
-                        os.execl(python,python, *sys.argv)
+                        args = [sys.argv[0]]
+                        args.append(str(game_index))
+                        os.execl(python, python, *args)
 
                         # only reaches here on an error.
                         done=True
@@ -398,9 +401,18 @@ class Menu(object):
 
 if __name__ == "__main__":
     #subprocess.call('clear',shell=True)
+
+    # argument to the script is an index number for the initial game to be
+    # highlighted.
+    if len(sys.argv) > 1:
+        try:
+            game_index = int(sys.argv[1])
+        except:
+            game_index = 0
+
     pygame.init()
 
     menu = Menu()
-    menu.show()
+    menu.show(game_index)
 
     pygame.quit()
