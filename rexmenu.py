@@ -179,7 +179,7 @@ class Menu(object):
         return keys
 
     key_defaults = {
-        "run": "Z X LSHIFT LCTRL SPACE RETURN",
+        "run": "Z X LSHIFT LCTRL SPACE RETURN 1 2 3 4",
         "quit": "ESCAPE",
         "up": "UP",
         "down": "DOWN",
