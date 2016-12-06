@@ -71,6 +71,7 @@ class Game(object):
 
 class Menu(object):
     image_paths = ["."]
+    konami_code = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a"]
 
     def __init__(self, mainmenu_name = "rexmenu"):
         self.w = 1024
@@ -103,6 +104,7 @@ class Menu(object):
         self.down_keys = None
         self.left_keys = None
         self.right_keys = None
+        self.konami_index = 0
         fh = self.find_cfg()
         if fh is None:
             self.parse_games()
@@ -185,6 +187,8 @@ class Menu(object):
         "down": "DOWN",
         "left": "LEFT",
         "right": "RIGHT",
+        "a": "1",
+        "b": "2",
     }
 
     int_defaults = {
@@ -303,6 +307,23 @@ class Menu(object):
     def is_visible(self, index):
         return index >= self.first_visible and index < self.first_visible + self.num_visible
 
+    def reset_konami(self):
+        self.konami_index = 0
+
+    def peek_konami(self, keyword):
+        return keyword == self.konami_code[self.konami_index]
+
+    def check_konami(self, keyword):
+        if self.peek_konami(keyword):
+            self.konami_index += 1
+        else:
+            self.konami_index = 0
+        return self.konami_index == len(self.konami_code)
+
+    def do_konami(self):
+        self.reset_konami()
+        sys.exit(1)
+
     def show(self, game_index=0):
         """Main routine to check for user input and drawing the menu
 
@@ -314,6 +335,8 @@ class Menu(object):
         num_games = len(self.games)
         if game_index >= num_games:
             game_index = num_games - 1
+        self.reset_konami()
+        konami = False
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -322,25 +345,32 @@ class Menu(object):
                     if event.key in self.quit_keys:
                         done = True
                     elif event.key in self.run_keys:
-                        pygame.quit()
-                        game = self.games[game_index]
-                        game.run()
+                        if event.key in self.b_keys and self.peek_konami("b"):
+                            konami = self.check_konami("b")
+                        elif event.key in self.a_keys and self.peek_konami("a"):
+                            konami = self.check_konami("a")
+                        else:
+                            pygame.quit()
+                            game = self.games[game_index]
+                            game.run()
 
-                        # restart the program to re-initialize pygame
-                        python = sys.executable
-                        args = [sys.argv[0]]
-                        args.append(str(game_index))
-                        os.execl(python, python, *args)
+                            # restart the program to re-initialize pygame
+                            python = sys.executable
+                            args = [sys.argv[0]]
+                            args.append(str(game_index))
+                            os.execl(python, python, *args)
 
-                        # only reaches here on an error.
-                        done=True
+                            # only reaches here on an error.
+                            done=True
                     elif event.key in self.up_keys:
+                        konami = self.check_konami("up")
                         game_index -= self.cols
                         if game_index < 0:
                             game_index += self.cols * self.rows
                             if game_index >= num_games:
                                 game_index -= self.cols
                     elif event.key in self.down_keys:
+                        konami = self.check_konami("down")
                         game_index += self.cols
                         if game_index >= num_games:
                             # check for partial last row
@@ -349,13 +379,19 @@ class Menu(object):
                             else:
                                 game_index = game_index % self.cols
                     elif event.key in self.left_keys:
+                        konami = self.check_konami("left")
                         game_index -= 1
                         if game_index < 0:
                             game_index = num_games - 1
                     elif event.key in self.right_keys:
+                        konami = self.check_konami("right")
                         game_index += 1
                         if game_index >= num_games:
                             game_index = 0
+
+                    if konami:
+                        self.do_konami()
+                        konami = False
 
             if not done and game_index != last_index:
                 # adjust the first visible row depending on the direction of
