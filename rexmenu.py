@@ -343,7 +343,11 @@ class Menu(object):
                     elif event.key in self.down_keys:
                         game_index += self.cols
                         if game_index >= num_games:
-                            game_index = game_index % self.cols
+                            # check for partial last row
+                            if game_index < self.cols * self.rows:
+                                game_index = num_games - 1
+                            else:
+                                game_index = game_index % self.cols
                     elif event.key in self.left_keys:
                         game_index -= 1
                         if game_index < 0:
