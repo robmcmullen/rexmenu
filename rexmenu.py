@@ -376,7 +376,6 @@ class Menu(object):
             pygame.draw.polygon(self.screen, self.highlight_color, [(50, 0), (100, 100), (0, 100)])
 
         # draw down arrow if the last row isn't on screen
-        check = (self.first_visible / self.cols) + self.visible_rows - 1
         last_visible = (self.first_visible / self.cols) + self.visible_rows - 1
         if last_visible < self.rows - 1:
             pygame.draw.polygon(self.screen, self.highlight_color, [(50, self.h), (100, self.h - 100), (0, self.h - 100)])

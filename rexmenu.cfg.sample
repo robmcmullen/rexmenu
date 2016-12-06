@@ -1,0 +1,23 @@
+[rexmenu]
+title = title.png
+quit = ESCAPE
+image path = /home/pi/src/arcade-screenshots
+thumbnail size = 250
+windowed = True
+window width = 1280
+window height = 1024
+highlight size = 8
+
+[advmame]
+digdug = Dig Dug
+mappy = Mappy
+mpatrol = Moon Patrol
+flicky = Flicky
+pacmania = Pac-Mania
+pacman = Pac-Man
+mspacman = Ms. Pac-Man
+nrallyx = Rally X
+berzerk = Berzerk
+
+#[atari800]
+#/home/rob/src/maproom/deps/omnivore/clockwise.atr = Jumpman
