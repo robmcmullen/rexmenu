@@ -98,10 +98,11 @@ class Menu(object):
         self.screen = None
         self.clock = pygame.time.Clock()
         self.games = []
-        self.font = pygame.font.Font(None, 30)
+        self.font = None
         self.mainmenu = mainmenu_name
         self.thumbnail_size = 200
         self.windowed = False
+        self.clear_screen = True
 
         # key definitions set during config file parsing
         self.quit_keys = None
@@ -111,11 +112,7 @@ class Menu(object):
         self.left_keys = None
         self.right_keys = None
         self.konami_index = 0
-        fh = self.find_cfg()
-        if fh is None:
-            self.parse_games()
-        else:
-            self.parse_cfg(fh)
+        self.cfg = self.find_cfg()
 
     def find_cfg(self):
         try:
@@ -129,9 +126,15 @@ class Menu(object):
                     fh = open("rexmenu.cfg")
                 except IOError:
                     fh = None
-        return fh
+        if fh is not None:
+            return self.parse_cfg(fh)
 
     def setup(self):
+        self.font = pygame.font.Font(None, 30)
+        if self.cfg is not None:
+            self.parse_games_cfg(self.cfg)
+        else:
+            self.parse_games()
         if self.windowed:
             flags = 0
         else:
@@ -173,9 +176,6 @@ class Menu(object):
     def mainmenu_image_path(self, cfg, keyword, value):
         self.image_paths = value.split()
 
-    def mainmenu_windowed(self, cfg, keyword, value):
-        self.windowed = cfg.getboolean(self.mainmenu, keyword)
-
     def get_keys(self, keysyms):
         keys = []
         for k in keysyms.split():
@@ -206,6 +206,11 @@ class Menu(object):
         "font border": "font_border",
     }
 
+    bool_defaults = {
+        "windowed": "windowed",
+        "clear screen": "clear_screen",
+    }
+
     def parse_cfg_mainmenu(self, c):
         possible = c.options(self.mainmenu)
         for keyword in possible:
@@ -223,14 +228,20 @@ class Menu(object):
             if c.has_option(self.mainmenu, keyword):
                 value = c.getint(self.mainmenu, keyword)
                 setattr(self, attr_name, value)
+        for keyword, attr_name in self.bool_defaults.iteritems():
+            if c.has_option(self.mainmenu, keyword):
+                value = c.getboolean(self.mainmenu, keyword)
+                setattr(self, attr_name, value)
 
     def parse_cfg(self, fh):
         c = ConfigParser.ConfigParser()
         c.readfp(fh, "rexmenu.cfg")
-        emulators = [e for e in c.sections() if e != self.mainmenu]
         if self.mainmenu in c.sections():
             self.parse_cfg_mainmenu(c)
+        return c
 
+    def parse_games_cfg(self, c):
+        emulators = [e for e in c.sections() if e != self.mainmenu]
         for emulator in emulators:
             for rom in c.options(emulator):
                 name = c.get(emulator, rom)
@@ -444,8 +455,6 @@ class Menu(object):
 
 
 if __name__ == "__main__":
-    subprocess.call('clear', shell=True)
-
     # argument to the script is an index number for the initial game to be
     # highlighted.
     game_index = 0
@@ -455,9 +464,13 @@ if __name__ == "__main__":
         except:
             pass
 
+    # parse menu before initializing pygame so we can check the config file
+    menu = Menu()
+    if menu.clear_screen:
+        subprocess.call('clear', shell=True)
+
     pygame.init()
 
-    menu = Menu()
     menu.show(game_index)
 
     pygame.quit()
