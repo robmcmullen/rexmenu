@@ -2,6 +2,7 @@ import sys
 import os
 import glob
 import subprocess
+import shlex
 import ConfigParser
 
 import pygame
@@ -15,17 +16,17 @@ class Game(object):
         if imgpath:
             filename, _ = os.path.splitext(os.path.basename(imgpath))
             if "_" in filename:
-                self.rom, title = filename.split("_", 1)
+                rom, title = filename.split("_", 1)
             else:
-                self.rom = title = filename
+                rom = title = filename
         elif rom:
-            self.rom = rom
             imgpath = find_image(rom, emulator)
         if title:
             self.title = title
         else:
-            self.title = self.rom
-        self.emulator = emulator
+            self.title = rom
+        self.cmdline = shlex.split(emulator)
+        self.cmdline.append(rom)
         try:
             self.image = pygame.image.load(imgpath).convert(24)
             self.rect = self.image.get_rect()
@@ -72,7 +73,7 @@ class Game(object):
         return 0, 0
 
     def run(self):
-        subprocess.call("%s %s" % (self.emulator, self.rom), shell=True) 
+        subprocess.call(self.cmdline)
 
 
 class Menu(object):
