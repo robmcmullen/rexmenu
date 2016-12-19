@@ -26,10 +26,13 @@ class Game(object):
         else:
             self.title = self.rom
         self.emulator = emulator
-        self.image = pygame.image.load(imgpath).convert(24)
-        self.rect = self.image.get_rect()
-        if max_size > 0:
-            self.rescale(max_size)
+        try:
+            self.image = pygame.image.load(imgpath).convert(24)
+            self.rect = self.image.get_rect()
+            if max_size > 0:
+                self.rescale(max_size)
+        except pygame.error:
+            self.image = None
         self.label = font.render(self.title, 1, grey)
         self.label_size = font.size(self.title)
 
@@ -53,9 +56,10 @@ class Game(object):
         self.rect = self.image.get_rect()
 
     def draw(self, screen, x, y, font_y):
-        self.rect.centerx = x
-        self.rect.centery = y
-        screen.blit(self.image, self.rect)
+        if self.image is not None:
+            self.rect.centerx = x
+            self.rect.centery = y
+            screen.blit(self.image, self.rect)
         w, h = self.label_size
         r = pygame.Rect((0, font_y, w, h))
         r.centerx = x
@@ -63,7 +67,9 @@ class Game(object):
 
     @property
     def size(self):
-        return self.rect.width, self.rect.height
+        if self.image is not None:
+            return self.rect.width, self.rect.height
+        return 0, 0
 
     def run(self):
         subprocess.call("%s %s" % (self.emulator, self.rom), shell=True) 
