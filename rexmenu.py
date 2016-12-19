@@ -236,6 +236,11 @@ class Menu(object):
 
     def parse_cfg(self, fh):
         c = ConfigParser.ConfigParser()
+
+        # option names are filenames, so we have to change the default to
+        # prevent lower casing of all names.
+        c.optionxform = str
+
         c.readfp(fh, "rexmenu.cfg")
         if self.mainmenu in c.sections():
             self.parse_cfg_mainmenu(c)
