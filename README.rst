@@ -33,6 +33,9 @@ RexMenu needs a configuration file that lists all of the emulators and games.
 An example file is in the source distribution as ``rexmenu.cfg.sample``. See
 the Configuration section below for more details.
 
+.. figure:: resources/screenshot.png
+   :align: right
+
 After starting the program, the display will change to a grid of thumbnail
 images with one highlighted. If there are more games defined in the config file
 than will fit on screen, up or down arrows will appear indicating that there
@@ -124,6 +127,7 @@ Image Options
 Other Options
 ~~~~~~~~~~~~~
 
+* ``title`` *(string)* path to an optional title graphic displayed at the top of the screen
 * ``windowed`` *(boolean)* if True, use window instead of full screen
 * ``window width`` *(int)* height of window in pixels if in windowed mode
 * ``window height`` *(int)* width of window in pixels if in windowed mode
