@@ -100,7 +100,9 @@ The configuration options for keystrokes are::
     konami_a
     konami_b
 
-where each of those takes a text list of pygame keyboard identifiers. For example, the default set of controls for ``run`` is::
+where each of those takes a text list of `pygame keyboard identifiers
+<https://www.pygame.org/docs/ref/key.html>`_ without the leading ``K_``. For
+example, the default set of controls for ``run`` is::
 
     [rexmenu]
     run = Z X LSHIFT LCTRL SPACE RETURN 1 2 3 4
@@ -114,21 +116,21 @@ respectively.
 Image Options
 ~~~~~~~~~~~~~
 
-* ``image path`` (space separated list) list of paths to search for images if
+* ``image path`` *(space separated list)* list of paths to search for images if
   the image isn't found in emulator-specific image paths. If a path has spaces
   within it, enclose the path in single or double quotes.
-* ``thumbnail size`` (int) images will be resized to fit within the square with each side being this size in pixels
+* ``thumbnail size`` *(int)* images will be resized to fit within the square with each side being this size in pixels
 
 Other Options
 ~~~~~~~~~~~~~
 
-* ``windowed`` (boolean) if True, use window instead of full screen
-* ``window width`` (int) height of window in pixels if in windowed mode
-* ``window height`` (int) width of window in pixels if in windowed mode
-* ``highlight size`` (int) width in pixels of the line used to draw the highlight box
-* ``grid spacing`` (int) number of pixels padding between grid entries
-* ``name spacing`` (int) number of pixels padding between grid image and text showing the name of the game
-* ``clear screen`` (boolean) whether or not to clear the console screen before displaying the menu
+* ``windowed`` *(boolean)* if True, use window instead of full screen
+* ``window width`` *(int)* height of window in pixels if in windowed mode
+* ``window height`` *(int)* width of window in pixels if in windowed mode
+* ``highlight size`` *(int)* width in pixels of the line used to draw the highlight box
+* ``grid spacing`` *(int)* number of pixels padding between grid entries
+* ``name spacing`` *(int)* number of pixels padding between grid image and text showing the name of the game
+* ``clear screen`` *(boolean)* whether or not to clear the console screen before displaying the menu
 
 Other Sections
 --------------
