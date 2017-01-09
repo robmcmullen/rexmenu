@@ -85,9 +85,9 @@ class Menu(object):
         self.h = 768
         self.usable_h = self.h
         self.highlight_size = 15
-        self.highlight_border = 25
+        self.grid_spacing = 25
         self.highlight_color = (0, 200, 255)
-        self.font_border = 5
+        self.name_spacing = 5
         self.rows = 0
         self.cols = 0
         self.visible_rows = 0
@@ -205,8 +205,8 @@ class Menu(object):
         "window height": "h",
         "thumbnail size": "thumbnail_size",
         "highlight size": "highlight_size",
-        "highlight border": "highlight_border",
-        "font border": "font_border",
+        "grid spacing": "grid_spacing",
+        "name spacing": "name_spacing",
     }
 
     bool_defaults = {
@@ -297,8 +297,8 @@ class Menu(object):
         else:
             self.title_image_rect = pygame.Rect((0, 0, 0, 0))
         self.title_height = 10 + self.title_image_rect.height
-        w += self.highlight_border + self.highlight_size
-        h += self.highlight_border + self.highlight_size + self.font_height + self.font_border
+        w += self.grid_spacing + self.highlight_size
+        h += self.grid_spacing + self.highlight_size + self.font_height + self.name_spacing
         self.usable_h = self.h - self.title_height
         self.cols = self.w / w
         self.rows = (len(self.games) + self.cols - 1) / self.cols
