@@ -116,3 +116,37 @@ Other options are:
 * ``name spacing`` (int) number of pixels padding between grid image and text showing the name of the game
 * ``clear screen`` (boolean) whether or not to clear the console screen before displaying the menu
 
+Other Sections
+--------------
+
+The remaining sections of the config file describe a command line used to
+launch the emulator, and the list of filenames of games that use that emulator.
+Any number of entries may be included in the config file, and the program will
+display all games in alphabetical order regardless of which section of the
+config file they appear.
+
+Entries for the same emulator but using different command line options are
+possible.  For instance, to use the `atari800
+<http://atari800.sourceforge.net/>`_ emulator in NTSC (60 Hz display) for some
+games and PAL (50 Hz display) for others, two sections could be added::
+
+    [atari800]
+    /opt/games/atari8bit/Jumpman.atr = Jumpman
+
+    [atari800 -pal]
+    /opt/games/atari8bit/Jumpman.atr = Jumpman (PAL)
+
+This is the format of entries: the key which is the path to the ROM file, and
+the value which is the name of the game to display in the grid.
+
+If the title is the same name as the filename, you can use the entry "title from name" and just list the paths to the games separated by whitespace::
+
+    [atari800]
+    title from name = /opt/games/atari8bit/Jumpman.atr /opt/games/atari8bit/Livewire.xex
+
+If the emulator program is not in the search path, you can use the full path to
+the emulator as the section title::
+
+    [/opt/games/bin/atari800 -xl]
+    /opt/games/atari8bit/yoomp.atr = Yoomp!
+
