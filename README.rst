@@ -14,6 +14,11 @@ Prerequisites
 * pygame
 * python-evdev (optional, for screen blanking utility on Raspberry Pi)
 
+Pygame is not installable through pip, so consult the `installation
+instructions <http://www.pygame.org/wiki/GettingStarted>`_ for details on your
+platform. On linux it is probably available through your package manager, and
+it is installed by default in the RetroPie distribution for the Raspberry Pi.
+
 In addition, RexMenu does not perform any discovery of ROMs or any scraping to
 get metadata. Any images used have to be sourced outside this program.
 
