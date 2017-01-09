@@ -106,22 +106,13 @@ defined.  The ``konami_a`` and ``konami_b`` config items are available to set
 what the program will use for the B and A keys, defaulting to ``2`` and ``1``
 respectively.
 
-Other options are::
+Other options are:
 
-    windowed::
+* ``windowed`` (boolean) if True, use window instead of full screen
+* ``window width`` (int) height of window in pixels if in windowed mode
+* ``window height`` (int) width of window in pixels if in windowed mode
+* ``highlight size`` (int) width in pixels of the line used to draw the highlight box
+* ``grid spacing`` (int) number of pixels padding between grid entries
+* ``name spacing`` (int) number of pixels padding between grid image and text showing the name of the game
+* ``clear screen`` (boolean) whether or not to clear the console screen before displaying the menu
 
-        (True/False) don't use full screen but instead open a window
-
-    int_defaults = {
-        "window width": "w",
-        "window height": "h",
-        "thumbnail size": "thumbnail_size",
-        "highlight size": "highlight_size",
-        "highlight border": "highlight_border",
-        "font border": "font_border",
-    }
-
-    bool_defaults = {
-        "windowed": "windowed",
-        "clear screen": "clear_screen",
-    }
