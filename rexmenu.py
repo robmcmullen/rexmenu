@@ -12,7 +12,7 @@ white = (255,255,255)
 grey = (100,100,100)
 
 class Game(object):
-    def __init__(self, font, rom="", emulator="advmame", title="", imgpath="", find_image=None, max_size=-1):
+    def __init__(self, font, rom="", emulator="advmame", title="", imgpath="", find_image=None, max_size=-1, extra_paths=[]):
         if imgpath:
             filename, _ = os.path.splitext(os.path.basename(imgpath))
             if "_" in filename:
@@ -20,7 +20,7 @@ class Game(object):
             else:
                 rom = title = filename
         elif rom:
-            imgpath = find_image(rom, emulator)
+            imgpath = find_image(rom, emulator, extra_paths)
         if title:
             self.title = title
         else:
@@ -146,7 +146,7 @@ class Menu(object):
         self.screen = pygame.display.set_mode((self.w, self.h), flags)
         pygame.mouse.set_visible(False)
 
-    def find_image(self, rom, emulator):
+    def find_image(self, rom, emulator, extra_paths=[]):
         # alternate locations and filenames
         alternates = [rom]
         base = os.path.basename(rom)
@@ -158,11 +158,13 @@ class Menu(object):
 
         # loop through all search directory combos looking for PNG or JPG files
         # that match the game name
+        search_paths = list(extra_paths)
+        search_paths.extend(self.image_paths)
         for base in alternates:
             for ext in [".png", ".jpg"]:
                 image = base + ext
                 if not os.path.isabs(image):
-                    for path in self.image_paths:
+                    for path in search_paths:
                         filename = os.path.join(path, image)
                         if os.path.exists(filename):
                             return filename
@@ -249,14 +251,17 @@ class Menu(object):
     def parse_games_cfg(self, c):
         emulators = [e for e in c.sections() if e != self.mainmenu]
         for emulator in emulators:
+            extra_image_path = []
             for rom in c.options(emulator):
                 name = c.get(emulator, rom)
                 if rom == "title from name":
                     for r in name.split():
                         game = Game(self.font, r, emulator, find_image=self.find_image, max_size=self.thumbnail_size)
                         self.games.append(game)
+                elif rom == "image path":
+                    extra_image_path = shlex.split(name)
                 else:
-                    game = Game(self.font, rom, emulator, name, find_image=self.find_image, max_size=self.thumbnail_size)
+                    game = Game(self.font, rom, emulator, name, find_image=self.find_image, max_size=self.thumbnail_size, extra_paths=extra_image_path)
                     self.games.append(game)
         self.games.sort()
 
