@@ -4,6 +4,8 @@ RexMenu
 
 A simple image-tiling multipurpose program launcher, designed primarily as frontend for MAME but easily supporting other emulators.
 
+.. figure:: resources/screenshot.png
+
 Prerequisites
 =============
 
@@ -32,9 +34,6 @@ depending on your operating system. Either way, it is started simply by::
 RexMenu needs a configuration file that lists all of the emulators and games.
 An example file is in the source distribution as ``rexmenu.cfg.sample``. See
 the Configuration section below for more details.
-
-.. figure:: resources/screenshot.png
-   :align: right
 
 After starting the program, the display will change to a grid of thumbnail
 images with one highlighted. If there are more games defined in the config file
