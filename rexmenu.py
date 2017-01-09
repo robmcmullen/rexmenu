@@ -175,7 +175,7 @@ class Menu(object):
         self.load_title_image(value)
 
     def mainmenu_image_path(self, cfg, keyword, value):
-        self.image_paths = value.split()
+        self.image_paths = shlex.split(value)
 
     def get_keys(self, keysyms):
         keys = []
