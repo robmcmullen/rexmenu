@@ -84,7 +84,12 @@ as ``rexmenu.cfg`` in the same directory as the ``rexmenu.py`` program.
 rexmenu Section
 ---------------
 
-The ``rexmenu`` section defines the appearance and control of the launcher.  The configuration options for keystrokes are::
+The ``rexmenu`` section defines the appearance and control of the launcher.
+
+Keystroke Options
+~~~~~~~~~~~~~~~~~
+
+The configuration options for keystrokes are::
 
     run
     quit
@@ -106,7 +111,16 @@ defined.  The ``konami_a`` and ``konami_b`` config items are available to set
 what the program will use for the B and A keys, defaulting to ``2`` and ``1``
 respectively.
 
-Other options are:
+Image Options
+~~~~~~~~~~~~~
+
+* ``image path`` (space separated list) list of paths to search for images if
+  the image isn't found in emulator-specific image paths. If a path has spaces
+  within it, enclose the path in single or double quotes.
+* ``thumbnail size`` (int) images will be resized to fit within the square with each side being this size in pixels
+
+Other Options
+~~~~~~~~~~~~~
 
 * ``windowed`` (boolean) if True, use window instead of full screen
 * ``window width`` (int) height of window in pixels if in windowed mode
@@ -150,3 +164,28 @@ the emulator as the section title::
     [/opt/games/bin/atari800 -xl]
     /opt/games/atari8bit/yoomp.atr = Yoomp!
 
+Images
+------
+
+Images for the grid are loaded based on the filename of the game, not the text
+title. PNG and JPEG files are supported. The path is stripped off of the game
+and the extension ".png" or ".jpg" is added to both the whole filename and the
+filename stripped of its extension. The first one found is used. So for
+``/opt/games/atari8bit/Jumpman.atr``, the names::
+
+    Jumpman.atr.png
+    Jumpman.atr.jpg
+    Jumpman.png
+    Jumpman.jpg
+
+are searched for in that order.
+
+They are searched for in the same directory as the game, or in one of the paths
+specified by the ``image path`` item in either in the individual emulator
+section, or the ``rexmenu`` section. The path specified in the emulator
+sections will be searched before the paths in the ``rexmenu`` section.
+
+Note again that RexMenu has no metadata scraping, so you'll have to download or
+create the images yourself. For MAME, a relatively complete set of screenshot images can be found at::
+
+    http://www.progettosnaps.net/snapshots/
