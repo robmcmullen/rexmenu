@@ -16,7 +16,9 @@ get metadata. Any images used have to be sourced outside this program.
 Install
 =======
 
-`pip install rexmenu`
+Install with::
+
+    pip install rexmenu
 
 Configuration
 =============
@@ -35,11 +37,9 @@ Usage
 =====
 
 The program may be launched from the command line, or autostarted by some means
-depending on your operating system. Either way, it is started simply by:
+depending on your operating system. Either way, it is started simply by::
 
-```
-python path/to/rexmenu.py
-```
+    python path/to/rexmenu.py
 
 Raspberry Pi
 ============
