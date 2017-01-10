@@ -33,13 +33,16 @@ Usage
 =====
 
 The program may be started from the command line, or autostarted by some means
-depending on your operating system. Either way, it is started simply by::
+depending on your operating system. Either way, if you have installed rexmenu
+through pip, the script will be in your search path and can be started simply
+by::
 
-    python path/to/rexmenu.py
+    rexmenu.py
 
-RexMenu needs a configuration file that lists all of the emulators and games.
-An example file is in the source distribution as ``rexmenu.cfg.sample``. See
-the Configuration section below for more details.
+RexMenu takes no command line arguments; it needs a configuration file that
+lists all of the emulators and games. An example file is in the source
+distribution as ``rexmenu.cfg.sample``. See the Configuration section below for
+more details.
 
 After starting the program, the display will change to a grid of thumbnail
 images with one highlighted. If there are more games defined in the config file
@@ -61,9 +64,9 @@ RetroPie
 
 The `RetroPie <https://retropie.org.uk/>`_ distribution on `Raspberry Pi 3
 <https://raspberrypi.org>`_ is a Raspbian- based linux distribution that
-provides many emulators. Its default front was too complicated for my small
-kids to use, so I designed this based on some code from a listener, Rex (hence
-the name), to my `Player/Missile Podcast <https://playermissile.com>`_.
+provides many emulators. Its default frontend was too complicated for my small
+kids to use, so I designed this based on some code from a listener (I host the
+`Player/Missile Podcast <https://playermissile.com>`_) Rex. And hence the name.
 
 In RetroPie, you can autostart RexMenu by editing the file::
 
@@ -72,8 +75,8 @@ In RetroPie, you can autostart RexMenu by editing the file::
 Extras
 ------
 
-For the RaspberryPi, I have included some extras. The program ``rpi-screen-
-blank.py`` will turn off the monitor after a set amount of time (default of 10
+For the RaspberryPi, I have included some extras. The program ``rpi-screen-blank.py``
+will turn off the monitor after a set amount of time (default of 10
 minutes) where it doesn't detect any keyboard or mouse input. It works by using
 the Python evdev module to monitor keyboard events and uses some RaspberryPi-
 specific commands to blank the console screen, which enables the DPMS of the
@@ -84,7 +87,36 @@ Configuration
 
 The RexMenu configuration file tis in INI-style format, with one required
 section that sets some application options, and any number of other sections
-describing the available programs to launch.
+describing the available programs to launch.  Here is an example of a
+configuration file::
+
+    [rexmenu]
+    title = title.png
+    quit = ESCAPE
+    image path = /home/pi/src/arcade-screenshots
+    thumbnail size = 250
+    windowed = False
+    window width = 1280
+    window height = 1024
+    highlight size = 8
+
+    [advmame]
+    digdug = Dig Dug
+    mappy = Mappy
+    mpatrol = Moon Patrol
+    flicky = Flicky
+    pacmania = Pac-Mania
+    pacman = Pac-Man
+    mspacman = Ms. Pac-Man
+    nrallyx = Rally X
+    berzerk = Berzerk
+
+    [atari800 -xl -pal]
+    /share/atari/yoomp.atr = Yoomp!
+
+    [python]
+    image path = /share/rex
+    /share/rex/atari/combat.py = Combat
 
 The configuration file can be stored as ``.rexmenu`` in your home directory, or
 as ``rexmenu.cfg`` in the same directory as the ``rexmenu.py`` program.
@@ -146,14 +178,16 @@ Other Sections
 
 The remaining sections of the config file describe a command line used to
 launch the emulator, and the list of filenames of games that use that emulator.
-Any number of entries may be included in the config file, and the program will
+Any number of sections may be included in the config file, and the program will
 display all games in alphabetical order regardless of which section of the
 config file they appear.
 
-Entries for the same emulator but using different command line options are
-possible.  For instance, to use the `atari800
-<http://atari800.sourceforge.net/>`_ emulator in NTSC (60 Hz display) for some
-games and PAL (50 Hz display) for others, two sections could be added::
+The section name is the path and command line arguments to the emulator that
+will run all the entries in that section. Entries for the same emulator but
+using different command line options are possible.  For instance, to use the
+`atari800 <http://atari800.sourceforge.net/>`_ emulator in NTSC (60 Hz display)
+for some games and PAL (50 Hz display) for others, two sections could be
+added::
 
     [atari800]
     /opt/games/atari8bit/Jumpman.atr = Jumpman
@@ -161,8 +195,9 @@ games and PAL (50 Hz display) for others, two sections could be added::
     [atari800 -pal]
     /opt/games/atari8bit/Jumpman.atr = Jumpman (PAL)
 
-This is the format of entries: the key which is the path to the ROM file, and
-the value which is the name of the game to display in the grid.
+This is the format of entries: the key (the left hand side, before the ``=``)
+which is the path to the ROM file, and the value (the right hand side, after
+the ``=``) which is the name of the game to display in the grid.
 
 If the title is the same name as the filename, you can use the entry "title from name" and just list the paths to the games separated by whitespace::
 

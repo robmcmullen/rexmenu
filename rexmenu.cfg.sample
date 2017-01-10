@@ -3,7 +3,7 @@ title = title.png
 quit = ESCAPE
 image path = /home/pi/src/arcade-screenshots
 thumbnail size = 250
-windowed = True
+windowed = False
 window width = 1280
 window height = 1024
 highlight size = 8
@@ -19,5 +19,9 @@ mspacman = Ms. Pac-Man
 nrallyx = Rally X
 berzerk = Berzerk
 
-#[atari800]
-#/home/rob/src/maproom/deps/omnivore/clockwise.atr = Jumpman
+[atari800 -xl -pal]
+/share/atari/yoomp.atr = Yoomp!
+
+[python]
+image path = /share/rex
+/share/rex/atari/combat.py = Combat
