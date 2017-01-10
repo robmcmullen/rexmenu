@@ -199,7 +199,9 @@ This is the format of entries: the key (the left hand side, before the ``=``)
 which is the path to the ROM file, and the value (the right hand side, after
 the ``=``) which is the name of the game to display in the grid.
 
-If the title is the same name as the filename, you can use the entry "title from name" and just list the paths to the games separated by whitespace::
+If the title is the same name as the filename, you can use the entry "title
+from name" and just list the paths to the games separated by whitespace (the
+directory portion and the file extension will be removed for display)::
 
     [atari800]
     title from name = /opt/games/atari8bit/Jumpman.atr /opt/games/atari8bit/Livewire.xex
