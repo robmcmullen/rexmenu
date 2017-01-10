@@ -2,7 +2,7 @@
 RexMenu
 ============================
 
-A simple image-tiling multipurpose program launcher, designed primarily as frontend for MAME but easily supporting other emulators.
+A simple image-tiling program launcher, designed primarily as frontend for MAME but easily supporting other emulators.
 
 .. image:: resources/screenshot.png
    :align: center
@@ -148,7 +148,7 @@ example, the default set of controls for ``run`` is::
     run = Z X LSHIFT LCTRL SPACE RETURN 1 2 3 4
 
 The Konami code is available (up up down down left right left right B A) for a
-function, currently to exit the emulator, but in the future will be user-
+function, currently to exit the frontend, but in the future will be user-
 defined.  The ``konami_a`` and ``konami_b`` config items are available to set
 what the program will use for the B and A keys, defaulting to ``2`` and ``1``
 respectively.
