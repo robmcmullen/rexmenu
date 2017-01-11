@@ -7,6 +7,8 @@ A simple image-tiling program launcher, designed primarily as frontend for MAME 
 .. image:: resources/screenshot.png
    :align: center
 
+.. contents:: **Contents**
+
 Prerequisites
 =============
 
