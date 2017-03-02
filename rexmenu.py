@@ -78,9 +78,9 @@ class Game(object):
 
 class Menu(object):
     image_paths = ["."]
-    konami_code = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a"]
+    konami_code_key_list = ["up", "up", "down", "down", "left", "right", "left", "right", "b", "a"]
 
-    def __init__(self, mainmenu_name = "rexmenu"):
+    def __init__(self, mainmenu_name = "rexmenu", alternate_config=None):
         self.w = 1024
         self.h = 768
         self.usable_h = self.h
@@ -105,6 +105,7 @@ class Menu(object):
         self.windowed = False
         self.clear_screen = True
         self.wrap_menu = True
+        self.konami_code = "exit"
 
         # key definitions set during config file parsing
         self.quit_keys = None
@@ -114,22 +115,28 @@ class Menu(object):
         self.left_keys = None
         self.right_keys = None
         self.konami_index = 0
-        self.cfg = self.find_cfg()
+        self.cfg = self.find_cfg(alternate_config)
 
-    def find_cfg(self):
-        try:
-            home = os.path.expanduser("~")
-            fh = open(os.path.join(home, ".rexmenu"))
-        except IOError:
+    def find_cfg(self, alternate_config=None):
+        if alternate_config is not None:
+            order = [alternate_config]
+        else:
+            order = ["~/.rexmenu", "/etc/rexmenu.cfg", "rexmenu.cfg"]
+        fh = None
+        home = os.path.expanduser("~")
+        for cfg in order:
+            if "~" in cfg:
+                cfg = cfg.replace("~", home)
+
             try:
-                fh = open("/etc/rexmenu.cfg")
+                fh = open(cfg, "r")
+                break
             except IOError:
-                try:
-                    fh = open("rexmenu.cfg")
-                except IOError:
-                    fh = None
+                pass
         if fh is not None:
             return self.parse_cfg(fh)
+        else:
+            raise RuntimeError("Configuration file not found. Tried: %s" % (", ".join(order)))
 
     def setup(self):
         self.font = pygame.font.Font(None, 30)
@@ -201,6 +208,10 @@ class Menu(object):
         "b": "2",
     }
 
+    text_defaults = {
+        "konami code": "konami_code",
+    }
+
     int_defaults = {
         "window width": "w",
         "window height": "h",
@@ -229,6 +240,10 @@ class Menu(object):
                 keysyms = c.get(self.mainmenu, key)
             key_list = self.get_keys(keysyms)
             setattr(self, "%s_keys" % key, key_list)
+        for keyword, attr_name in self.text_defaults.iteritems():
+            if c.has_option(self.mainmenu, keyword):
+                value = c.get(self.mainmenu, keyword)
+                setattr(self, attr_name, value)
         for keyword, attr_name in self.int_defaults.iteritems():
             if c.has_option(self.mainmenu, keyword):
                 value = c.getint(self.mainmenu, keyword)
@@ -341,18 +356,29 @@ class Menu(object):
         self.konami_index = 0
 
     def peek_konami(self, keyword):
-        return keyword == self.konami_code[self.konami_index]
+        return keyword == self.konami_code_key_list[self.konami_index]
 
     def check_konami(self, keyword):
         if self.peek_konami(keyword):
             self.konami_index += 1
         else:
             self.konami_index = 0
-        return self.konami_index == len(self.konami_code)
+        return self.konami_index == len(self.konami_code_key_list)
 
     def do_konami(self):
         self.reset_konami()
-        sys.exit(1)
+        action = self.konami_code
+        if action == "exit":
+            sys.exit(1)
+        else:
+            self.restart(action)
+
+    def restart(self, *extra_args):
+        python = sys.executable
+        args = [sys.argv[0]]
+        for arg in extra_args:
+            args.append(str(arg))
+        os.execl(python, python, *args)
 
     def show(self, game_index=0):
         """Main routine to check for user input and drawing the menu
@@ -385,10 +411,7 @@ class Menu(object):
                             game.run()
 
                             # restart the program to re-initialize pygame
-                            python = sys.executable
-                            args = [sys.argv[0]]
-                            args.append(str(game_index))
-                            os.execl(python, python, *args)
+                            self.restart(game_index)
 
                             # only reaches here on an error.
                             done=True
@@ -482,14 +505,15 @@ if __name__ == "__main__":
     # argument to the script is an index number for the initial game to be
     # highlighted.
     game_index = 0
+    alternate_config = None
     if len(sys.argv) > 1:
         try:
             game_index = int(sys.argv[1])
         except:
-            pass
+            alternate_config = sys.argv[1]
 
     # parse menu before initializing pygame so we can check the config file
-    menu = Menu()
+    menu = Menu(alternate_config=alternate_config)
     if menu.clear_screen:
         subprocess.call('clear', shell=True)
 

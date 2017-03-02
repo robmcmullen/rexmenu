@@ -175,6 +175,7 @@ Other Options
 * ``name spacing`` *(int)* number of pixels padding between grid image and text showing the name of the game
 * ``clear screen`` *(boolean)* whether or not to clear the console screen before displaying the menu
 * ``wrap menu`` *(boolean)* allow the cursor to wrap to the top or bottom when attempting to move beyond the bottom or top
+* ``konami code`` *(string)* action to perform when the Konami code is completed (see the `Konami Code`_ section below)
 
 Other Sections
 --------------
@@ -240,6 +241,19 @@ Note again that RexMenu has no metadata scraping, so you'll have to download or
 create the images yourself. For MAME, a relatively complete set of screenshot images can be found at::
 
     http://www.progettosnaps.net/snapshots/
+
+Konami Code
+-----------
+
+When the Konami code is completed, RexMenu will perform the action defined in
+the ``konami code`` entry in the main configuration section.  Currently, there
+are two types of actions:
+
+* ``exit``: exit the menu, back to the command line
+* *config file name*: load an alternate configuration file and display that menu.
+
+When the alternate configuration file is used, it can have its own Konami code
+action, so you can chain menus in this manner.
 
 License
 =======
