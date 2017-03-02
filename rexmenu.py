@@ -7,7 +7,11 @@ import subprocess
 import shlex
 import ConfigParser
 
-import pygame
+try:
+    import pygame
+except ImportError:
+    print("ERROR: Can't find Pygame!\n\nRexMenu requires Pygame, but ih is not installable through pip. On linux or\nRaspberryPi it's probably available through your package manager. Otherwise,\nconsult their instructions: http://www.pygame.org/wiki/GettingStarted")
+    sys.exit()
 
 
 white = (255,255,255)
