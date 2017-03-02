@@ -10,7 +10,7 @@ import ConfigParser
 try:
     import pygame
 except ImportError:
-    print("ERROR: Can't find Pygame!\n\nRexMenu requires Pygame, but ih is not installable through pip. On linux or\nRaspberryPi it's probably available through your package manager. Otherwise,\nconsult their instructions: http://www.pygame.org/wiki/GettingStarted")
+    print("ERROR: Can't find Pygame!\nPlease install with 'pip install pygame', use your package\nmanager on linux or RaspberryPi, or see the Pygame docs:\nhttp://www.pygame.org/wiki/GettingStarted")
     sys.exit()
 
 
