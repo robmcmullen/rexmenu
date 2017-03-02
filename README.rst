@@ -4,7 +4,7 @@ RexMenu
 
 A simple image-tiling program launcher, designed primarily as frontend for MAME but easily supporting other emulators.
 
-.. image:: resources/screenshot.png
+.. image:: https://playermissile.com/_images/rexmenu_screenshot.png
    :align: center
 
 .. contents:: **Contents**

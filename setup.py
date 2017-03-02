@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from distutils.core import setup
+from setuptools import setup
 
 scripts = ["rexmenu.py"]
 if os.path.exists("/usr/bin/tvservice"):
@@ -9,7 +9,6 @@ if os.path.exists("/usr/bin/tvservice"):
 
 with open("README.rst", "r") as fp:
     long_description = fp.read()
-print long_description
 
 setup(name='rexmenu',
       version='2.0',
