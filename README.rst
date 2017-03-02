@@ -174,6 +174,7 @@ Other Options
 * ``grid spacing`` *(int)* number of pixels padding between grid entries
 * ``name spacing`` *(int)* number of pixels padding between grid image and text showing the name of the game
 * ``clear screen`` *(boolean)* whether or not to clear the console screen before displaying the menu
+* ``wrap menu`` *(boolean)* allow the cursor to wrap to the top or bottom when attempting to move beyond the bottom or top
 
 Other Sections
 --------------
