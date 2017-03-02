@@ -104,6 +104,7 @@ class Menu(object):
         self.thumbnail_size = 200
         self.windowed = False
         self.clear_screen = True
+        self.wrap_menu = True
 
         # key definitions set during config file parsing
         self.quit_keys = None
@@ -212,6 +213,7 @@ class Menu(object):
     bool_defaults = {
         "windowed": "windowed",
         "clear screen": "clear_screen",
+        "wrap menu": "wrap_menu",
     }
 
     def parse_cfg_mainmenu(self, c):
@@ -394,9 +396,12 @@ class Menu(object):
                         konami = self.check_konami("up")
                         game_index -= self.cols
                         if game_index < 0:
-                            game_index += self.cols * self.rows
-                            if game_index >= num_games:
-                                game_index -= self.cols
+                            if self.wrap_menu:
+                                game_index += self.cols * self.rows
+                                if game_index >= num_games:
+                                    game_index -= self.cols
+                            else:
+                                game_index += self.cols
                     elif event.key in self.down_keys:
                         konami = self.check_konami("down")
                         game_index += self.cols
@@ -404,18 +409,26 @@ class Menu(object):
                             # check for partial last row
                             if game_index < self.cols * self.rows:
                                 game_index = num_games - 1
-                            else:
+                            elif self.wrap_menu:
                                 game_index = game_index % self.cols
+                            else:
+                                game_index -= self.cols
                     elif event.key in self.left_keys:
                         konami = self.check_konami("left")
                         game_index -= 1
                         if game_index < 0:
-                            game_index = num_games - 1
+                            if self.wrap_menu:
+                                game_index = num_games - 1
+                            else:
+                                game_index = 0
                     elif event.key in self.right_keys:
                         konami = self.check_konami("right")
                         game_index += 1
                         if game_index >= num_games:
-                            game_index = 0
+                            if self.wrap_menu:
+                                game_index = 0
+                            else:
+                                game_index = num_games - 1
 
                     if konami:
                         self.do_konami()
