@@ -18,7 +18,7 @@ setup(name='rexmenu',
       author_email='feedback@playermissile.com',
       url='https://playermissile.com',
       scripts=scripts,
-      license="GPL",
+      license="MPL 2.0",
       install_requires = [
           'pygame',
           ],
